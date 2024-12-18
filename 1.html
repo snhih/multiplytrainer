@@ -1,0 +1,177 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Случайное число</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .expression {
+            font-size: 3em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .answer-input {
+            font-size: 1.5em;
+            margin-right: 10px;
+            padding: 5px;
+            width: 100px;
+            text-align: center;
+        }
+        .answer-btn, .refresh-btn {
+            padding: 10px 20px;
+            font-size: 1.2em;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .answer-btn:hover, .refresh-btn:hover {
+            background-color: #0056b3;
+        }
+        .answer-btn {
+            background-color: #28a745;
+            font-size: 1em; /* Уменьшил размер шрифта */
+            padding: 5px 10px; /* Уменьшил отступы */
+        }
+        .message {
+            font-size: 1.2em;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .correct {
+            color: green;
+        }
+        .incorrect {
+            color: red;
+        }
+        .timer {
+            font-size: 1.5em;
+            color: #333;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="expression">
+        <span id="randomExpression"></span>
+        <input type="text" class="answer-input" id="answerInput">
+        <button class="answer-btn" onclick="checkAnswer()">Ответить</button>
+    </div>
+    <button class="refresh-btn" onclick="refreshPage()" id="refreshBtn">Новое задание</button>
+    <div class="message" id="message"></div>
+    <div class="timer" id="timer"></div>
+
+    <script>
+        let correctAnswer;
+        let timerInterval;
+        let timeLeft = 5;
+
+        // Генерация случайного числа от 2 до 9
+        function generateRandomNumber() {
+            return Math.floor(Math.random() * 8) + 2;  // Изменили диапазон с 1-9 на 2-9
+        }
+
+        // Отображение выражения
+        function displayExpression() {
+            const num1 = generateRandomNumber();
+            const num2 = generateRandomNumber();
+            correctAnswer = num1 * num2;
+            document.getElementById('randomExpression').textContent = `${num1} × ${num2} =`;
+        }
+
+        // Установка фокуса на поле ввода
+        function setFocusOnInput() {
+            const inputField = document.getElementById('answerInput');
+            inputField.focus();
+        }
+
+        // Ограничение ввода только цифрами
+        function allowOnlyNumbers(event) {
+            const charCode = event.keyCode || event.which;
+            // Блокируем ввод, если символ не является цифрой
+            if (charCode < 48 || charCode > 57) {
+                event.preventDefault();
+            }
+        }
+
+        // Проверка ответа
+        function checkAnswer() {
+            clearInterval(timerInterval);  // Останавливаем таймер при получении ответа
+            const userAnswer = parseInt(document.getElementById('answerInput').value);
+            const messageElement = document.getElementById('message');
+            const timerElement = document.getElementById('timer');
+            
+            if (userAnswer === correctAnswer) {
+                messageElement.textContent = 'Правильно!';
+                messageElement.classList.remove('incorrect');
+                messageElement.classList.add('correct');
+            } else {
+                messageElement.textContent = `Неправильно. Правильный ответ: ${correctAnswer}`;
+                messageElement.classList.remove('correct');
+                messageElement.classList.add('incorrect');
+            }
+
+            timerElement.style.display = 'none';  // Скрываем таймер после ответа
+            document.getElementById('refreshBtn').focus();  // Смещаем фокус на кнопку "Новое задание"
+        }
+
+        // Обновление страницы
+        function refreshPage() {
+            location.reload();
+        }
+
+        // Таймер, отсчитывающий время на ответ
+        function startTimer() {
+            timerInterval = setInterval(function() {
+                const timerElement = document.getElementById('timer');
+                timerElement.textContent = `Осталось времени: ${timeLeft} секунд`;
+                timeLeft--;
+
+                if (timeLeft < 0) {
+                    clearInterval(timerInterval);  // Останавливаем таймер
+                    const messageElement = document.getElementById('message');
+                    messageElement.textContent = `Время вышло! Правильный ответ: ${correctAnswer}`;
+                    messageElement.classList.remove('correct');
+                    messageElement.classList.add('incorrect');
+                    timerElement.style.display = 'none';  // Скрываем таймер, если время истекло
+                    document.getElementById('refreshBtn').focus();  // Смещаем фокус на кнопку "Новое задание"
+                }
+            }, 1000);
+        }
+
+        // Обработчик события нажатия клавиши Enter
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                checkAnswer();  // Проверка ответа при нажатии Enter
+            }
+        }
+
+        // Инициализация
+        function initialize() {
+            displayExpression();
+            setFocusOnInput();
+            document.getElementById('answerInput').addEventListener('keypress', allowOnlyNumbers);
+            document.getElementById('answerInput').addEventListener('keypress', handleKeyPress);  // Добавляем обработчик для Enter
+            startTimer();
+        }
+
+        // Выполнение при загрузке страницы
+        initialize();
+    </script>
+</body>
+</html>
