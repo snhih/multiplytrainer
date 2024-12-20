@@ -153,6 +153,7 @@
     let timerInterval;
     let timeLeft = 5;
     let selectedVoice = null;
+    let focusedElementId = ''; // Глобальная переменная для хранения ID элемента с фокусом
 
     function loadVoices() {
         const voices = speechSynthesis.getVoices();
@@ -248,6 +249,20 @@
             speechSynthesis.speak(utterance);
         }
     }
+
+    // Слушатель для изменения фокуса
+    document.addEventListener('focus', function(event) {
+        if (event.target.id !== 'toggleSpeech') {
+            focusedElementId = event.target.id; // Сохраняем ID элемента с фокусом
+        }
+    }, true);
+
+    // Восстановление фокуса, если изменяется чекбокс
+    document.getElementById('toggleSpeech').addEventListener('change', function() {
+        if (focusedElementId) {
+            document.getElementById(focusedElementId).focus(); // Восстанавливаем фокус
+        }
+    });
 
     document.getElementById('submitAnswer').addEventListener('click', checkAnswer);
     document.getElementById('newTask').addEventListener('click', generateTask);
