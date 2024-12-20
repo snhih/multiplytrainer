@@ -35,7 +35,7 @@
         }
 
         .result {
-            font-size: 24px;
+            font-size: 18px; /* Уменьшен размер шрифта таймера */
             margin-top: 20px;
         }
 
@@ -56,8 +56,8 @@
         }
 
         button {
-            padding: 10px 15px;
-            font-size: 16px;
+            padding: 15px 25px; /* Увеличен размер кнопок */
+            font-size: 18px; /* Увеличен размер шрифта кнопок */
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -85,13 +85,16 @@
         .checkbox-container {
             display: flex;
             align-items: center;
-            margin-bottom: 15px; /* Добавлен отступ между чекбоксом и полем ввода */
+            margin-bottom: 15px;
+            width: 100%; /* Растянуто на всю ширину */
+            justify-content: center; /* Центрируем чекбокс и подпись */
         }
 
         .checkbox-container label {
             margin-left: 5px;
             font-size: 14px;
             font-weight: bold;
+            white-space: nowrap; /* Запрещаем перенос текста на новую строку */
         }
 
         .buttons {
@@ -113,12 +116,12 @@
             }
 
             button {
-                font-size: 14px;
-                padding: 8px 12px;
+                font-size: 16px;
+                padding: 12px 20px; /* Уменьшено на мобильных устройствах */
             }
 
             .checkbox-container {
-                margin-bottom: 10px; /* Уменьшен отступ на мобильных устройствах */
+                margin-bottom: 10px;
             }
         }
     </style>
@@ -179,7 +182,7 @@
         timerInterval = setInterval(updateTimer, 1000);
 
         answerField.disabled = false;
-        answerField.focus({ preventScroll: true }); // Устанавливаем фокус
+        answerField.focus({ preventScroll: true });
     }
 
     function updateTimer() {
