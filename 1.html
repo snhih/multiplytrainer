@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -23,7 +23,7 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 400px;
-            position: relative; /* Для того, чтобы разместить чекбокс в верхнем правом углу */
+            position: relative;
         }
 
         .expression {
@@ -85,6 +85,7 @@
             right: 10px;
             display: flex;
             align-items: center;
+            z-index: 1;
         }
 
         .checkbox-container label {
@@ -99,6 +100,22 @@
             justify-content: center;
             margin-top: 20px;
             gap: 10px;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+
+            input {
+                font-size: 28px;
+                padding: 10px;
+            }
+
+            button {
+                font-size: 14px;
+                padding: 8px 12px;
+            }
         }
     </style>
 </head>
